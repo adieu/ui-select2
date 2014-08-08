@@ -39,7 +39,7 @@ angular.module('ui.select2', []).value('uiSelect2Config', {}).directive('uiSelec
         */
         var convertToAngularModel = function(select2_data) {
           var model;
-          if (opts.simple_tags) {
+          if (opts.simple_tags || opts.multiple) {
             model = [];
             angular.forEach(select2_data, function(value, index) {
               model.push(value.id);
@@ -65,6 +65,17 @@ angular.module('ui.select2', []).value('uiSelect2Config', {}).directive('uiSelec
               angular_data,
               function(value, index) {
                 model.push({'id': value, 'text': value});
+              });
+          } else if (opts.multiple && opts.data){
+            model = []
+            angular.forEach(
+              angular_data,
+              function(value, index) {
+                angular.forEach(opts.data, function(data) {
+                  if (data.id == value) {
+                    model.push(data);
+                  }
+                });
               });
           } else {
             model = angular_data;
